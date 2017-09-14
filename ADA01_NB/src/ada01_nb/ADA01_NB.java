@@ -1,21 +1,35 @@
 package ada01_nb;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import org.gephi.graph.api.DirectedGraph;
+import org.gephi.graph.api.Edge;
+import org.gephi.graph.api.GraphController;
+import org.gephi.graph.api.GraphModel;
+import org.gephi.graph.api.Node;
+import org.gephi.io.exporter.api.ExportController;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 
+
 public class ADA01_NB {
+    
     public static void main(String[] args) {
-        
-     
+        System.out.println("Graphs");
         
         //Modelo G(n,m) de Erdös y Rényi
         erdos_renyi(50, 40);
+        
+        //Graph toolkit API
+        test_graphs();
+        
 
     }
 
-    private static int volado(int min, int max){
+    public static int volado(int min, int max){
         return (int) Math.floor(Math.random()*(max-min+1)+(min));
     }
 
@@ -25,10 +39,16 @@ public class ADA01_NB {
         2. elegir uniformemente al azar m distintos pares de distintos vértices
     */
 
-    private static void erdos_renyi(int n, int m){
+    public static void erdos_renyi(int n, int m){
+        
         HashMap hashMap_n = new HashMap();
         HashMap hashMap_m = new HashMap();
         int aristas_totales = 0, aristas = 1;
+        
+        //Get a graph model - it exists because we have a workspace
+        //GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        
+        //Get a graph model - it exists because we have a workspace
 
         //generar n vértices
         for(int v = 1; v <= n; v++){
@@ -65,7 +85,7 @@ public class ADA01_NB {
 
     }
 
-    private static boolean crear_nodo(int key, HashMap hashMap_n){
+    public static boolean crear_nodo(int key, HashMap hashMap_n){
         boolean respuesta = false;
 
         // checa el hashmap
@@ -83,7 +103,7 @@ public class ADA01_NB {
         return respuesta;
     }
 
-    private static boolean crear_arista(int key_nodo_u, int key_nodo_v, int key, HashMap hashMap_m){
+    public static boolean crear_arista(int key_nodo_u, int key_nodo_v, int key, HashMap hashMap_m){
         boolean respuesta = false;
         String arista = key_nodo_u + "--" + key_nodo_v;
 
@@ -100,5 +120,48 @@ public class ADA01_NB {
         }
 
         return respuesta;
+    }
+    
+    public static void test_graphs() {
+        /*
+        Es necesario crear un proyecto para usar las características del kit de 
+        herramientas. La creación de un nuevo proyecto también crea un espacio 
+        de trabajo.
+        */
+        
+        //Init a project - and therefore a workspace
+        ProjectController projectController = Lookup.getDefault().lookup(ProjectController.class);
+        projectController.newProject();
+        
+        Workspace workspace = projectController.getCurrentWorkspace();
+        
+        //Create two nodes
+        GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel(workspace);
+        
+        Node n0 = graphModel.factory().newNode("n0");
+        n0.setLabel("Nodo n0");
+        
+        Node n1 = graphModel.factory().newNode("n1");
+        n1.setLabel("Nodo 01");
+        
+        //Create an edge - directed and weight 1
+        Edge e1 = graphModel.factory().newEdge(n0,n1, 1, true);
+        
+        //Append as a Directed Graph
+        DirectedGraph directedGraph = graphModel.getDirectedGraph();
+        directedGraph.addNode(n0);
+        directedGraph.addNode(n1);
+        directedGraph.addEdge(e1);
+        
+        //Export full graph
+        ExportController exportController = Lookup.getDefault().lookup(ExportController.class);
+        
+        try{
+            exportController.exportFile(new File("text.gexf"), workspace);
+            System.out.println("Se creó el archivo gexf");
+        }catch(IOException e){
+            System.out.println(e);
+        }
+            
     }
 }
