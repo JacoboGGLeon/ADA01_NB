@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ada01_nb;
 
 import java.util.HashMap;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
+import org.openide.util.Lookup;
 
 public class ADA01_NB {
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+     
+        
         //Modelo G(n,m) de Erdös y Rényi
         erdos_renyi(50, 40);
 
@@ -44,8 +41,8 @@ public class ADA01_NB {
             int nodo_al_azar_1 = volado(1, n);
             int nodo_al_azar_2 = volado(1, n);
 
-            System.out.println("Se eligió al azar el nodo " + nodo_al_azar_1);
-            System.out.println("Se eligió al azar el nodo " + nodo_al_azar_2);
+            //System.out.println("Se eligió al azar el nodo " + nodo_al_azar_1);
+            //System.out.println("Se eligió al azar el nodo " + nodo_al_azar_2);
 
             boolean respuesta = crear_arista(nodo_al_azar_1, nodo_al_azar_2, aristas, hashMap_m);
 
@@ -61,7 +58,8 @@ public class ADA01_NB {
         System.out.println("Aristas: " + hashMap_m.size());
 
         for(int i = 1; i <= hashMap_m.size(); i++){
-            System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            //System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            System.out.println(hashMap_m.get(i));
         }
 
 
@@ -74,12 +72,12 @@ public class ADA01_NB {
         // si existe el key del nodo, entonces no lo agrega al hashmap
         if(hashMap_n.containsValue(key)){
             respuesta = false;
-            System.out.println("NO Se creó el nodo: " + hashMap_n.get(key));
+            //System.out.println("NO Se creó el nodo: " + hashMap_n.get(key));
         // si no existe el key del nodo, entonces sí lo agrega al hashmap
         }else if(!hashMap_n.containsValue(key)){
             respuesta = true;
             hashMap_n.put(key, key);
-            System.out.println("Se creó el nodo: " + hashMap_n.get(key));
+            //System.out.println("Se creó el nodo: " + hashMap_n.get(key));
         }
 
         return respuesta;
@@ -97,7 +95,7 @@ public class ADA01_NB {
         // si no existe el key de la arista entonces sí lo agrega al hashmap
         }else if(!hashMap_m.containsValue(arista)){
             hashMap_m.put(key, arista);
-            System.out.println("Se creó la arista: " + hashMap_m.get(key));
+            //System.out.println("Se creó la arista: " + hashMap_m.get(key));
             respuesta = true;
         }
 
