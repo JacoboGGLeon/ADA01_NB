@@ -9,6 +9,7 @@ import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.Node;
+import org.gephi.graph.api.UndirectedGraph;
 import org.gephi.io.exporter.api.ExportController;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
@@ -21,10 +22,10 @@ public class ADA01_NB {
         System.out.println("Graphs");
         
         //Modelo G(n,m) de Erdös y Rényi
-        erdos_renyi(50, 40);
+        erdos_renyi(100, 30, true);
         
         //Graph toolkit API
-        test_graphs();
+        //test_graphs();
         
 
     }
@@ -39,28 +40,52 @@ public class ADA01_NB {
         2. elegir uniformemente al azar m distintos pares de distintos vértices
     */
 
-    public static void erdos_renyi(int n, int m){
-        
+    public static void erdos_renyi(int n, int m, boolean dirigido){
         HashMap hashMap_n = new HashMap();
         HashMap hashMap_m = new HashMap();
         int aristas_totales = 0, aristas = 1;
         
-        //Get a graph model - it exists because we have a workspace
-        //GraphModel graphModel = Lookup.getDefault().lookup(GraphController.class).getGraphModel();
+        /*
+            Es necesario crear un proyecto para usar las características del kit de 
+            herramientas. La creación de un nuevo proyecto también crea un espacio 
+            de trabajo.
+        */
+        
+        //Init a project - and therefore a workspace
+        ProjectController pc_erdos_renyi = Lookup.getDefault().lookup(ProjectController.class);
+        pc_erdos_renyi.newProject();
+        Workspace ws_erdos_renyi = pc_erdos_renyi.getCurrentWorkspace();
         
         //Get a graph model - it exists because we have a workspace
-
-        //generar n vértices
+        GraphModel gm_erdos_renyi = Lookup.getDefault().lookup(GraphController.class).getGraphModel(ws_erdos_renyi);
+        
+        //Append as a Undirected Graph
+        DirectedGraph directedGraph = gm_erdos_renyi.getDirectedGraph();
+        
+        //Gnerar n vértices
         for(int v = 1; v <= n; v++){
             boolean respuesta = crear_nodo(v, hashMap_n);
+            
+            //Crear nodos
+            if(respuesta == true){
+                String nodo = Integer.toString(v);
+                
+                //Node[] neighbors = gm_erdos_renyi.factory().newNode(v);
+                Node n_nodo = gm_erdos_renyi.factory().newNode(nodo);
+                n_nodo.setLabel("Nodo " + nodo);
+                
+                //Append
+                directedGraph.addNode(n_nodo); 
+               
+            }
         }
-
-        //generar m aristas
+        
+        //Generar m aristas
         while(aristas_totales != m){
             //elegir un nodo al azar
             int nodo_al_azar_1 = volado(1, n);
             int nodo_al_azar_2 = volado(1, n);
-
+                        
             //System.out.println("Se eligió al azar el nodo " + nodo_al_azar_1);
             //System.out.println("Se eligió al azar el nodo " + nodo_al_azar_2);
 
@@ -69,6 +94,43 @@ public class ADA01_NB {
             if(respuesta){
                 aristas++;
                 aristas_totales++;
+                
+                Node n_nodo_01 = gm_erdos_renyi.factory().newNode("0"); 
+                Node n_nodo_02 = gm_erdos_renyi.factory().newNode("0");
+                
+                
+                //Iterate over nodes
+                for (Node n_nodo_temp : directedGraph.getNodes()) {
+                    if(Integer.parseInt(n_nodo_temp.getId().toString()) == nodo_al_azar_1){
+                        n_nodo_01 = directedGraph.getNode(n_nodo_temp.getId());
+                        
+                        System.out.println("Nodo al azar: " + nodo_al_azar_1);
+                        System.out.println("Nuevo nodo => label: " + n_nodo_temp.getLabel() + " id: " + n_nodo_temp.getId());
+                        
+                        //break;
+                    }else if(Integer.parseInt(n_nodo_temp.getId().toString()) == nodo_al_azar_2){
+                        n_nodo_02 = directedGraph.getNode(n_nodo_temp.getId());
+                        
+                        System.out.println("Nodo al azar: " + nodo_al_azar_2);
+                        System.out.println("Nuevo nodo => label: " + n_nodo_temp.getLabel() + " id: " + n_nodo_temp.getId());
+                        
+                        //break;
+                    }
+                }
+                
+                System.out.println("Arista: " + n_nodo_01.getId().toString() + " + " + n_nodo_02.getId().toString());
+                
+                Edge e_edge = gm_erdos_renyi.factory().newEdge(n_nodo_01, n_nodo_02, false);
+                directedGraph.addEdge(e_edge);
+                
+                
+                //Create an edge - directed and weight 1
+                //System.out.println("Nodo 1: " +  n_nodo_01.getId());
+                //Edge e_edge = gm_erdos_renyi.factory().newEdge(ge, n_nodo_02);
+                //undirectedGraph.addEdge(e_edge);
+                
+                //Edge e1 = gm_erdos_renyi.factory().newEdge(, n0, 1f, true);
+                
             }
 
         }
@@ -80,6 +142,16 @@ public class ADA01_NB {
         for(int i = 1; i <= hashMap_m.size(); i++){
             //System.out.println("Arista " + i + ": " + hashMap_m.get(i));
             System.out.println(hashMap_m.get(i));
+        }
+        
+        //Export full graph
+        ExportController exportController = Lookup.getDefault().lookup(ExportController.class);
+        
+        try{
+            exportController.exportFile(new File("text.gexf"), ws_erdos_renyi);
+            System.out.println("Se creó el archivo gexf");
+        }catch(IOException e){
+            System.out.println(e);
         }
 
 
