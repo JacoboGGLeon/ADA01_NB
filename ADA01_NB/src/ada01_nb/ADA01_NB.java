@@ -43,7 +43,7 @@ public class ADA01_NB {
     public static void erdos_renyi(int n, int m, boolean dirigido){
         HashMap hashMap_n = new HashMap();
         HashMap hashMap_m = new HashMap();
-        int aristas_totales = 0, aristas = 1;
+        int aristas_totales = 0, aristas = 0;
         
         /*
             Es necesario crear un proyecto para usar las características del kit de 
@@ -120,16 +120,9 @@ public class ADA01_NB {
                 
                 System.out.println("Arista: " + n_nodo_01.getId().toString() + " + " + n_nodo_02.getId().toString());
                 
+                //Create an edge - directed and weight 1
                 Edge e_edge = gm_erdos_renyi.factory().newEdge(n_nodo_01, n_nodo_02, false);
                 directedGraph.addEdge(e_edge);
-                
-                
-                //Create an edge - directed and weight 1
-                //System.out.println("Nodo 1: " +  n_nodo_01.getId());
-                //Edge e_edge = gm_erdos_renyi.factory().newEdge(ge, n_nodo_02);
-                //undirectedGraph.addEdge(e_edge);
-                
-                //Edge e1 = gm_erdos_renyi.factory().newEdge(, n0, 1f, true);
                 
             }
 
