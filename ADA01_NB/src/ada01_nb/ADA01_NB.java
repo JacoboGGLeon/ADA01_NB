@@ -1,10 +1,11 @@
 package ada01_nb;
 
-//import java.io.File;
-//import java.io.IOException;
+import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
-/*
+
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.GraphController;
@@ -14,7 +15,7 @@ import org.gephi.io.exporter.api.ExportController;
 import org.gephi.project.api.ProjectController;
 import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
-*/
+
 
 public class ADA01_NB {
     
@@ -22,10 +23,11 @@ public class ADA01_NB {
         System.out.println("Graphs");
         
         //Modelo G(n,m) de Erdös y Rényi
-        erdos_renyi(10, 30, true, false);
+        //erdos_renyi(5, 10, true, false);
+        erdos_renyi(50, 300, true, true);
 
     }
-
+ 
     /*
     Modelo G(n,m) de Erdös y Rényi:
     1. crear n vértices
@@ -89,6 +91,9 @@ public class ADA01_NB {
         //Se leen el tamaño de los repositorios de nodos y aristas
         System.out.println("Nodos: " + hashMap_n.size());
         System.out.println("Aristas: " + hashMap_m.size());
+        
+        System.out.println("*Generando archivo gexf");
+        generar_gexf(hashMap_n, hashMap_m, dirigido, "erdos_renyi.gexf");
     }
     
     public static boolean crear_nodo(int key, HashMap hashMap_n){
@@ -104,8 +109,7 @@ public class ADA01_NB {
         // Si NO existe el nodo, entonces SÍ lo agrega al repositorio
         }else if(!hashMap_n.containsKey(key)){
             //Crea el nodo con key y value
-            String value = "Nodo: " + key;
-            hashMap_n.put(key, value);
+            hashMap_n.put(key, key);
             System.out.println("Se creó el nodo => (key) " + key + " (value) " + hashMap_n.get(key));
             
             //Regresa verdadero
@@ -175,6 +179,73 @@ public class ADA01_NB {
         return (int) Math.floor(Math.random()*(max-min+1)+(min));
     }
     
-    
+    public static void generar_gexf(HashMap hashMap_n, HashMap hashMap_m, boolean dirigido, String archivo){
+        String conector = null;
+        
+        if(dirigido == true){
+            conector = "->";
+        }else if(dirigido == false){
+            conector = "--";
+        }
+        
+        //Init a project - and therefore a workspace
+        ProjectController pc_erdos_renyi = Lookup.getDefault().lookup(ProjectController.class);
+        pc_erdos_renyi.newProject();
+        Workspace ws_erdos_renyi = pc_erdos_renyi.getCurrentWorkspace();
+        
+        //Get a graph model - it exists because we have a workspace
+        GraphModel gm_erdos_renyi = Lookup.getDefault().lookup(GraphController.class).getGraphModel(ws_erdos_renyi);
+        
+        //Append as a Directed Graph
+        DirectedGraph directedGraph = gm_erdos_renyi.getDirectedGraph();
+        
+        //Se recorre el repositorio de nodos
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            
+            //System.out.println("GEXF n => " + "(key) " + hashMap_n.get(i));
+            
+            Node n = gm_erdos_renyi.factory().newNode(hashMap_n.get(i).toString());
+            n.setLabel(hashMap_n.get(i).toString());
+            n.setColor(Color.cyan);
+            
+            System.out.println("GEXF n => " + "(key) " + hashMap_n.get(i) + " (value) " + n.getLabel());
+                
+            //Append
+            directedGraph.addNode(n); 
+        }
+        
+        //Se recorre el repositorio de aristas
+        for(int i = 1; i <= hashMap_m.size(); i++){
+            //System.out.println("GEXF m => Arista " + i + ": " + hashMap_m.get(i));
+            String arista = hashMap_m.get(i).toString();
+            String[] parts = arista.split(conector);
+            
+            Integer key_origen = Integer.parseInt(parts[0]);
+            Node nodo_origen = directedGraph.getNode(key_origen.toString());//gm_erdos_renyi.getGraph().getNode(key_origen);
+            
+            Integer key_destino = Integer.parseInt(parts[1]);
+            Node nodo_destino = directedGraph.getNode(key_destino.toString());//gm_erdos_renyi.getGraph().getNode(key_destino);
+            
+            System.out.println("GEXF m => " + " (key) " + nodo_origen.getId().toString() + " (key) " + nodo_destino.getId().toString());
+      
+            Edge e = gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_destino, dirigido);
+            e.setColor(Color.decode("#adb3ff"));
+            
+            //Apend
+            directedGraph.addEdge(e);
+        }
+        
+        
+        //Export full graph
+        ExportController exportController = Lookup.getDefault().lookup(ExportController.class);
+        
+        try{
+            exportController.exportFile(new File(archivo), ws_erdos_renyi);
+            System.out.println("Se creó el archivo: " + archivo);
+        }catch(IOException e){
+            System.out.println(e);
+        }
+        
+    }
     
 }
