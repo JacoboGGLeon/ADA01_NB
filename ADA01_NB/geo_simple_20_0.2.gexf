@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3" version="1.3" xmlns:viz="http://www.gexf.net/1.3/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd">
+  <meta lastmodifieddate="2017-09-18">
+    <creator>Gephi 0.9</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <nodes>
+      <node id="1" label="0.2056623673777197,0.5695977273209555">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="2" label="0.9355063280534451,0.7696375868260669">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="3" label="0.2178069253705096,0.8385304001575729">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="4" label="0.9970898622314318,0.8199264315694753">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="5" label="0.19509687980761403,0.23507233696519247">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="6" label="0.6139825917536801,0.9048325345065124">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="7" label="0.9108807321512781,0.3152947871420214">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="8" label="0.31727351379094926,0.727349538727733">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="9" label="0.6427818393981637,0.6116187879975649">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="10" label="0.42871213538648234,0.028382317939341872">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="11" label="0.11386100144625211,0.018686947023979328">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="12" label="0.09623186874697709,0.44422629541905545">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="13" label="0.3626205974202341,0.5420746890254817">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="14" label="0.2972707825387507,0.5437962963956966">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="15" label="0.6453965935902722,0.36031141971563085">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="16" label="0.8123614961696453,0.6332818833337113">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="17" label="0.5303484439446507,0.49540775674544746">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="18" label="0.8677513704539767,0.5262577908339361">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="19" label="0.9291710932438,0.5130619623066544">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="20" label="0.8733527456677881,0.36887948565006146">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="1" target="8">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="1" source="1" target="12">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="2" source="1" target="13">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="3" source="1" target="14">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="4" source="2" target="4">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="5" source="2" target="16">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="6" source="3" target="8">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="7" source="4" target="2">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="8" source="7" target="19">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="9" source="7" target="20">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="10" source="8" target="1">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="11" source="8" target="3">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="12" source="8" target="13">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="13" source="8" target="14">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="14" source="9" target="16">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="15" source="9" target="17">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="16" source="12" target="1">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="17" source="13" target="1">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="18" source="13" target="8">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="19" source="13" target="14">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="20" source="13" target="17">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="21" source="14" target="1">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="22" source="14" target="8">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="23" source="14" target="13">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="24" source="15" target="17">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="25" source="16" target="2">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="26" source="16" target="9">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="27" source="16" target="18">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="28" source="16" target="19">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="29" source="17" target="9">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="30" source="17" target="13">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="31" source="17" target="15">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="32" source="18" target="16">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="33" source="18" target="19">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="34" source="18" target="20">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="35" source="19" target="7">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="36" source="19" target="16">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="37" source="19" target="18">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="38" source="19" target="20">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="39" source="20" target="7">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="40" source="20" target="18">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="41" source="20" target="19">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
