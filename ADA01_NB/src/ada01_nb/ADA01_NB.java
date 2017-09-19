@@ -22,8 +22,9 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 50;
+        int n = 20;
         int m = (int) ((n*n)*0.2);
+        int d = (int) (n*0.2);
         
         //in in dirigido auto-ciclos
         
@@ -34,8 +35,91 @@ public class ADA01_NB {
         //gilbert(n, 0.2, true, false);
         
         //Modelo G(n,r) geográfico simple:
-        geo_simple(n, 0.2, true, false);
+        //geo_simple(n, 0.2, true, false);
+        
+        //Variante del modelo G(n,d) Barabási-Albert
 
+        barabasi_albert(n, d, true, false);
+    }
+    
+    /*
+    Variante del modelo G(n,d) Barabási-Albert
+    1. colocar n vértices uno por uno, 
+    asignando a cada uno d aristas a vértices distintos 
+    de tal manera que la probabilidad de que el vértice nuevo se conecte a un vértice existente v 
+    es proporcional a la cantidad de aristas que v tiene actualmente 
+        *los primeros d vértices se conecta todos a todos
+    */
+    
+    public static void barabasi_albert(int n, int d , boolean dirigido, boolean auto){
+        //Repositorio de nodos
+        HashMap hashMap_n = new HashMap();
+        
+        //Repositorio de aristas
+        HashMap hashMap_m = new HashMap();
+        
+        //Inicialización de aristas
+        int aristas = 1;
+                     
+        //Generar n nodos empezando por el 1
+        for(int v = 1; v <= n; v++){
+            String value = Integer.toString(v);            
+            boolean respuesta = crear_nodo(v, value, hashMap_n);
+            
+            int nodo_origen = v;
+            System.out.println("Se eligió el nodo origen: " + nodo_origen);
+            
+            //Checar si existe el nodo origen
+            if(hashMap_n.containsKey(nodo_origen)){
+                System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
+            }
+            
+            int aristas_por_nodo = 0;
+            
+            if(hashMap_n.size() >  d){
+                boolean condicion = false;
+                while(condicion != true ){
+                    //Elegir un nodo destino al azar
+                    int nodo_destino = volado(1,v);
+                    System.out.println("Se eligió al azar el nodo destino: " + nodo_destino);
+
+                    //Checar si existe el nodo destino
+                    if(hashMap_n.containsKey(nodo_destino)){
+                        System.out.println("SÍ existe el nodo (key) " + nodo_destino); 
+                    }
+                    
+                    //Se intenta crear el arista
+                    System.out.println("Se intenta crear el arista " + nodo_origen + " + " + nodo_destino);
+                    boolean respuesta_arista = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
+
+                    //Si se creó el arista, continua 
+                    if(respuesta_arista == true){
+                        aristas++;
+                        aristas_por_nodo++;
+                    } 
+                    
+                    double c_condicion = 1- (aristas_por_nodo/d);
+                        if(c_condicion == 0){
+                            condicion = true;
+                        }
+                        System.out.println("CONDICION => " + 1 + "-(" + aristas_por_nodo + "/" + d + ") = condicion " + c_condicion);
+                }
+                
+            }
+        }
+        
+        //Se recorre el repositorio de aristas
+        for(int i = 1; i <= hashMap_m.size(); i++){
+            System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+        }
+        
+        //Se leen el tamaño de los repositorios de nodos y aristas
+        System.out.println("Nodos: " + hashMap_n.size());
+        System.out.println("Aristas: " + hashMap_m.size());
+        
+        System.out.println("*Generando archivo gexf");
+        String file = "./resultados/grafos gexf/barabasi_albert" + "_" + n + "_" + d + ".gexf";
+        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
     }
     
     /*
