@@ -22,15 +22,107 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
+        int n = 20;
+        int m = (int) ((n*n)*0.2);
+        
         //in in dirigido auto-ciclos
         
         //Modelo G(n,m) de Erdös y Rényi
-        //erdos_renyi(50, 300, true, true);
+        //erdos_renyi(n, m, true, false);
         
         //Modelo G(n,p) de Gilbert
-        gilbert(500, 0.2, true, false);
+        //gilbert(n, 0.2, true, false);
+        
+        //Modelo G(n,r) geográfico simple:
+        geo_simple(n, 0.2, true, false);
 
     }
+    
+    /*
+    Modelo G(n,r) geográfico simple:
+    1. colocar n vértices en un rectángulo unitario con coordenadas uniformes (o normales) (x,y)
+    2. colocar una arista entre cada par que queda en distancia r o menor
+    */
+    
+    public static void geo_simple(int n, double r, boolean dirigido, boolean auto){
+        //Repositorio de nodos
+        HashMap hashMap_n = new HashMap();
+        
+        //Repositorio de aristas
+        HashMap hashMap_m = new HashMap();
+                     
+        //Generar n nodos empezando por el 1
+        for(int v = 1; v <= n; v++){
+            double x = Math.random();
+            double y = Math.random();
+            String value = Double.toString(x) + ',' + Double.toString(y);
+            
+            boolean respuesta = crear_nodo(v, value, hashMap_n);
+        }
+        
+        int aristas = 1;
+        
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Elegir un nodo origen
+            String nodo_origen = hashMap_n.get(i).toString();
+            System.out.println("Se eligió el nodo origen: " + nodo_origen);
+            
+            //Checar si existe el nodo origen
+            if(hashMap_n.containsKey(nodo_origen)){
+                System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
+            }
+            
+            //Checa los demás nodos menos ese
+            for(int j = 1; j <= hashMap_n.size(); j++){
+                String nodo_destino = hashMap_n.get(j).toString();
+                System.out.println("Se eligió el nodo destino: " + nodo_destino);
+                
+                //Checar si existe el nodo destino
+                if(hashMap_n.containsKey(nodo_destino)){
+                    System.out.println("SÍ existe el nodo (key) " + nodo_destino); 
+                }
+                
+                String[] parts_nodo_origen = nodo_origen.split(",");
+                double x_nodo_origen = Double.parseDouble(parts_nodo_origen[0]);
+                double y_nodo_origen = Double.parseDouble(parts_nodo_origen[1]);
+                
+                //System.out.println("NODO ORIGEN => " + "x: " + x_nodo_origen + " y : " + y_nodo_origen);
+                
+                String[] parts_nodo_destino = nodo_destino.split(",");
+                double x_nodo_destino = Double.parseDouble(parts_nodo_destino[0]);
+                double y_nodo_destino = Double.parseDouble(parts_nodo_destino[1]);
+                
+                //System.out.println("NODO DESTINO =>" + " x: " + x_nodo_destino + " y : " + y_nodo_destino);
+                double distancia = Math.sqrt(Math.pow((x_nodo_origen - x_nodo_destino), 2) + Math.pow((y_nodo_origen - y_nodo_destino), 2));
+                
+                System.out.println("DISTANCIA => " + distancia);
+
+                if(distancia <= r){
+                    System.out.println("Se intenta crear el arista " + i + " + " + j);
+                    boolean respuesta = crear_arista(i, j, aristas, hashMap_m, dirigido, auto);
+
+                    //Si se creó el arista, se cuenta
+                    if(respuesta == true){
+                        aristas++;
+                    }
+                }
+            }
+        }
+        
+        //Se leen el tamaño de los repositorios de nodos y aristas
+        System.out.println("Nodos: " + hashMap_n.size());
+        System.out.println("Aristas: " + hashMap_m.size());
+        
+        for(int k = 1; k <= hashMap_m.size(); k++){
+            System.out.println("Arista " + k + ": " + hashMap_m.get(k));
+        }
+        
+        System.out.println("*Generando archivo gexf");
+        String file = "geo_simple" + "_" + n + "_" + r + ".gexf";
+        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+        
+         
+    } 
     
     /*
     Modelo G(n, p) de Gilbert:
@@ -47,7 +139,8 @@ public class ADA01_NB {
                      
         //Generar n nodos empezando por el 1
         for(int v = 1; v <= n; v++){
-            boolean respuesta = crear_nodo(v, hashMap_n);
+            String value = Integer.toString(v);
+            boolean respuesta = crear_nodo(v, value, hashMap_n);
         }
         
         //Inicialización de aristas
@@ -94,58 +187,21 @@ public class ADA01_NB {
                     }
                 }
                 
-                System.out.println("ARISTAS DEL NODO " + i + aristas_por_nodo);
+                //System.out.println("ARISTAS DEL NODO " + i + ": "+ aristas_por_nodo);
             }
         
-        /*
         //Se recorre el repositorio de aristas
         for(int i = 1; i <= hashMap_m.size(); i++){
             System.out.println("Arista " + i + ": " + hashMap_m.get(i));
         }
-        */
         
         //Se leen el tamaño de los repositorios de nodos y aristas
         System.out.println("Nodos: " + hashMap_n.size());
         System.out.println("Aristas: " + hashMap_m.size());
-        
+                
         System.out.println("*Generando archivo gexf");
-        generar_gexf(hashMap_n, hashMap_m, dirigido, "gilbert.gexf");
-        
-        
-        /*
-        //Generar m aristas
-        while(aristas_totales != ((valor_esperado*n))){
-            //Elegir un nodo origen al azar
-            int nodo_origen = volado(1, n);
-            
-            System.out.println("Se eligió al azar el nodo origen: " + nodo_origen);
-            
-            //Checar si existe el nodo origen
-            if(hashMap_n.containsKey(nodo_origen)){
-                System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
-            }
-
-            //Elegir un nodo destino al azar
-            int nodo_destino = volado(1, n);
-
-            System.out.println("Se eligió al azar el nodo destino: " + nodo_destino);
-
-            //Checar si existe el nodo destino
-            if(hashMap_n.containsKey(nodo_destino)){
-                System.out.println("SÍ existe el nodo (key) " + nodo_destino); 
-            }
-
-            System.out.println("Se intenta crear el arista " + nodo_origen + " + " + nodo_destino);
-            boolean respuesta = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
-
-            //Si se creó el arista, continua 
-                if(respuesta){
-                    aristas++;
-                    aristas_totales++;
-                }
-            }
-
-        */
+        String file = "gilbert" + "_" + n + "_" + p + ".gexf";
+        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
  
     }
  
@@ -164,7 +220,8 @@ public class ADA01_NB {
                      
         //Generar n nodos empezando por el 1
         for(int v = 1; v <= n; v++){
-            boolean respuesta = crear_nodo(v, hashMap_n);
+            String value = Integer.toString(v);
+            boolean respuesta = crear_nodo(v, value, hashMap_n);
         }
         
         //Inicialización de aristas
@@ -214,24 +271,27 @@ public class ADA01_NB {
         System.out.println("Aristas: " + hashMap_m.size());
         
         System.out.println("*Generando archivo gexf");
-        generar_gexf(hashMap_n, hashMap_m, dirigido, "erdos_renyi.gexf");
+        String file = "erdos_renyi" + "_" + n + "_" + m + ".gexf";
+        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
     }
     
-    public static boolean crear_nodo(int key, HashMap hashMap_n){
+    public static boolean crear_nodo(int key, String value, HashMap hashMap_n){
         boolean respuesta = false;
 
         // checa el hashmap
         // Si ya existe el nodo, entonces NO lo agrega al repositorio
-        if(hashMap_n.containsKey(key)){
-            System.out.println("NO se creó el nodo => (key) " + hashMap_n.get(key) + " (value) " + hashMap_n.values());
+        //
+        if(hashMap_n.containsValue(value)){
+            System.out.println("NO se creó el nodo => (key) " + key + " (value) " + value);
             //Regresa falso
             respuesta = false;
             
         // Si NO existe el nodo, entonces SÍ lo agrega al repositorio
-        }else if(!hashMap_n.containsKey(key)){
+        //}else if(!hashMap_n.containsKey(key)){
+        }else if(!hashMap_n.containsValue(value)){
             //Crea el nodo con key y value
-            hashMap_n.put(key, key);
-            System.out.println("Se creó el nodo => (key) " + key + " (value) " + hashMap_n.get(key));
+            System.out.println("Se creó el nodo => (key) " + key + " (value) " + value);
+            hashMap_n.put(key, value);
             
             //Regresa verdadero
             respuesta = true;
@@ -324,12 +384,12 @@ public class ADA01_NB {
         for(int i = 1; i <= hashMap_n.size(); i++){
             
             //System.out.println("GEXF n => " + "(key) " + hashMap_n.get(i));
-            
-            Node n = gm_erdos_renyi.factory().newNode(hashMap_n.get(i).toString());
+            String nodo = Integer.toString(i);
+            Node n = gm_erdos_renyi.factory().newNode(nodo);
             n.setLabel(hashMap_n.get(i).toString());
             n.setColor(Color.decode("#ff99dc"));
             
-            System.out.println("GEXF n => " + "(key) " + hashMap_n.get(i) + " (value) " + n.getLabel());
+            System.out.println("GEXF n => " + "(key) " + i + " (value) " + n.getLabel());
                 
             //Append
             directedGraph.addNode(n); 
