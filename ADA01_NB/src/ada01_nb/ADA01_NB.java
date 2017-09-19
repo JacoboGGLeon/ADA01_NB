@@ -22,7 +22,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 20;
+        int n = 50;
         int m = (int) ((n*n)*0.2);
         
         //in in dirigido auto-ciclos
@@ -118,7 +118,7 @@ public class ADA01_NB {
         }
         
         System.out.println("*Generando archivo gexf");
-        String file = "geo_simple" + "_" + n + "_" + r + ".gexf";
+        String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
         generar_gexf(hashMap_n, hashMap_m, dirigido, file);
         
          
