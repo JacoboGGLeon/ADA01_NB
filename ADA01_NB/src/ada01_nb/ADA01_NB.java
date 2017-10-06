@@ -22,7 +22,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 20;
+        int n = 100;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
