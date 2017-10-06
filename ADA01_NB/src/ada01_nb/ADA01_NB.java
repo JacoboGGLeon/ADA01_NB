@@ -22,7 +22,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 100;
+        int n = 50;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
@@ -32,7 +32,7 @@ public class ADA01_NB {
         erdos_renyi(n, m, true, false);
         
         //Modelo G(n,p) de Gilbert
-        //gilbert(n, 0.2, true, false);
+        gilbert(n, 0.2, true, false);
         
         //Modelo G(n,r) geográfico simple:
         //geo_simple(n, 0.2, true, false);
@@ -281,11 +281,14 @@ public class ADA01_NB {
         //Se leen el tamaño de los repositorios de nodos y aristas
         System.out.println("Nodos: " + hashMap_n.size());
         System.out.println("Aristas: " + hashMap_m.size());
-                
+                        
         System.out.println("*Generando archivo gexf");
-        String file = "gilbert" + "_" + n + "_" + p + ".gexf";
+        String file = "./resultados/grafos gexf/gilbert" + "_" + n + "_" + p + ".gexf";
         generar_gexf(hashMap_n, hashMap_m, dirigido, file);
- 
+        
+        String file_bfs = "./resultados/grafos gexf/gilbert_bfs" + "_" + n + "_" + p + ".gexf";
+        
+        bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
     }
  
     /*
