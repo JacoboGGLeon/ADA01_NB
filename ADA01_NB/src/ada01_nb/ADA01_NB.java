@@ -22,14 +22,14 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 50;
+        int n = 20;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
         //in in dirigido auto-ciclos
         
         //Modelo G(n,m) de Erdös y Rényi
-        erdos_renyi(n, m, true, false);
+        //erdos_renyi(n, m, true, false);
         
         //Modelo G(n,p) de Gilbert
         gilbert(n, 0.2, true, false);
