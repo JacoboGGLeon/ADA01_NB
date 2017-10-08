@@ -22,7 +22,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 20;
+        int n = 50;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
@@ -35,7 +35,7 @@ public class ADA01_NB {
         //gilbert(n, 0.2, true, false);
         
         //Modelo G(n,r) geográfico simple:
-        geo_simple(n, 0.5, true, false);
+        geo_simple(n, 0.3, true, false);
         
         //Variante del modelo G(n,d) Barabási-Albert
         //barabasi_albert(n, d, true, false);
