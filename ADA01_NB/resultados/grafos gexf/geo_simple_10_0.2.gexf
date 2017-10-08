@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3" version="1.3" xmlns:viz="http://www.gexf.net/1.3/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd">
+  <meta lastmodifieddate="2017-10-08">
+    <creator>Gephi 0.9</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <nodes>
+      <node id="1" label="0.14014899394444413,0.048185471248894274">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="2" label="0.6940686468100414,0.6631399633715794">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="3" label="0.22942361019259216,0.26433614715334786">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="4" label="0.06535374649226078,0.5466680402304758">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="5" label="0.7856637000947475,0.43884461013151355">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="6" label="0.5117139890945527,0.8249917918633529">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="7" label="0.9855154861341436,0.4270343773575078">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="8" label="0.850029552501465,0.70880006679258">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="9" label="0.03743773729712596,0.4878494058752979">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+      <node id="10" label="0.9658370593863248,0.47001578224700025">
+        <viz:size value="0.0"></viz:size>
+        <viz:color r="255" g="153" b="220"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="2" target="8">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="1" source="4" target="9">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="2" source="5" target="10">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="3" source="7" target="10">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="4" source="8" target="2">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="5" source="9" target="4">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="6" source="10" target="5">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+      <edge id="7" source="10" target="7">
+        <viz:color r="173" g="179" b="255"></viz:color>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

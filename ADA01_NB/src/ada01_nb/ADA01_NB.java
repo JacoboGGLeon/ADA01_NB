@@ -22,7 +22,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 20;
+        int n = 100;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
@@ -32,10 +32,10 @@ public class ADA01_NB {
         //erdos_renyi(n, m, true, false);
         
         //Modelo G(n,p) de Gilbert
-        gilbert(n, 0.2, true, false);
+        //gilbert(n, 0.2, true, false);
         
         //Modelo G(n,r) geográfico simple:
-        //geo_simple(n, 0.2, true, false);
+        geo_simple(n, 0.2, true, false);
         
         //Variante del modelo G(n,d) Barabási-Albert
         //barabasi_albert(n, d, true, false);
@@ -72,12 +72,13 @@ public class ADA01_NB {
             if(hashMap_n.containsKey(nodo_origen)){
                 System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
             }
-            
-            int aristas_por_nodo = 0;
-            
-            if(hashMap_n.size() >  d){
+        
+            if(hashMap_n.size() > d){
+                
                 boolean condicion = false;
-                while(condicion != true ){
+                int aristas_por_nodo = 0;
+
+                while(condicion != true){
                     //Elegir un nodo destino al azar
                     int nodo_destino = volado(1,v);
                     System.out.println("Se eligió al azar el nodo destino: " + nodo_destino);
@@ -90,23 +91,23 @@ public class ADA01_NB {
                     //Se intenta crear el arista
                     System.out.println("Se intenta crear el arista " + nodo_origen + " + " + nodo_destino);
                     boolean respuesta_arista = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
-
+                    
                     //Si se creó el arista, continua 
                     if(respuesta_arista == true){
                         aristas++;
                         aristas_por_nodo++;
-                    } 
+                    }  
                     
-                    double c_condicion = 1- (aristas_por_nodo/d);
-                        if(c_condicion == 0){
-                            condicion = true;
-                        }
-                        System.out.println("CONDICION => " + 1 + "-(" + aristas_por_nodo + "/" + d + ") = condicion " + c_condicion);
-                }
-                
+                    double c_condicion = ((double) aristas_por_nodo) / ( (double) d);
+                    
+                    if(c_condicion == 1){
+                        condicion = true;
+                    }
+                    System.out.println("CONDICION => " + "(" + aristas_por_nodo + "/" + d + ") = condicion " + c_condicion);
+                }                
             }
-        }
         
+        }
         //Se recorre el repositorio de aristas
         for(int i = 1; i <= hashMap_m.size(); i++){
             System.out.println("Arista " + i + ": " + hashMap_m.get(i));
@@ -118,7 +119,11 @@ public class ADA01_NB {
         
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/barabasi_albert" + "_" + n + "_" + d + ".gexf";
-        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+        //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+                
+        String file_bfs = "./resultados/grafos gexf/barabasi_albert_bfs" + "_" + n + "_" + d + ".gexf";
+        
+        bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
     }
     
     /*
@@ -203,6 +208,10 @@ public class ADA01_NB {
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
         generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+                
+        String file_bfs = "./resultados/grafos gexf/geo_simple_bfs" + "_" + n + "_" + r + ".gexf";
+        
+        bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
         
          
     } 
@@ -371,14 +380,15 @@ public class ADA01_NB {
         // checa el hashmap
         // Si ya existe el nodo, entonces NO lo agrega al repositorio
         //
-        if(hashMap_n.containsValue(value)){
+        //if(hashMap_n.containsValue(value)){
+        if(hashMap_n.containsKey(key)){
             System.out.println("NO se creó el nodo => (key) " + key + " (value) " + value);
             //Regresa falso
             respuesta = false;
             
         // Si NO existe el nodo, entonces SÍ lo agrega al repositorio
-        //}else if(!hashMap_n.containsKey(key)){
-        }else if(!hashMap_n.containsValue(value)){
+        }else if(!hashMap_n.containsKey(key)){
+        //}else if(!hashMap_n.containsValue(value)){
             //Crea el nodo con key y value
             System.out.println("Se creó el nodo => (key) " + key + " (value) " + value);
             hashMap_n.put(key, value);
@@ -534,12 +544,12 @@ public class ADA01_NB {
         }
         
         //LEE TODOS LOS NODOS
-        /*        
+        
         int contador = 1;
         for(int i = 1; i <= hashMap_n.size(); i++){
             //Si existe
             if(hashMap_n.containsKey(i)){
-                int nodo = Integer.parseInt(hashMap_n.get(i).toString());
+                int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
                 //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
                 System.out.println("nodo a evaluar: " + nodo);        
 
@@ -555,7 +565,7 @@ public class ADA01_NB {
                     }
                 }            
             }
-        }*/
+        }
         
         //Repositorio de nodos descubiertos
         HashMap nodos_descubiertos = new HashMap();
@@ -588,19 +598,45 @@ public class ADA01_NB {
             for(int i = 1; i <= hashMap_n.size(); i++){
                 //System.out.println("hashMap_n.get(i): " + hashMap_n.get(i));
                 
-                int nodo_existente = Integer.parseInt(hashMap_n.get(i).toString());
+                int nodo_existente = i;//Integer.parseInt(hashMap_n.get(i).toString());
                 
                 //System.out.println("nodo_existente: " + nodo_existente);
                 if(nodo_existente != key){
                     nodos_no_descubiertos.put(nodo_existente, nodo_existente);
                 }
             }
-        }        
+        }    
+        
+        System.out.println("EXISTENCIA**************"); 
+        //checar si tiene conexiones        
+        for(int l =1; l <= hashMap_n.size();l++){
+            if(hashMap_n.containsKey(l)){ 
+                int nodo_evaluador = l;//Integer.parseInt(hashMap_n.get(l).toString());                      
+                boolean existencia = false;
+                for(int j = 1; j <= hashMap_m.size(); j++){
+                    String candidato = hashMap_m.get(j).toString();
+                    String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);
+                    
+                    //Si está en algun lado
+                    if(nodo_evaluador == key_destino){
+                       existencia = true; 
+                    }
+                }
+                
+                if(existencia == false){
+                    nodos_descubiertos.put(nodo_evaluador, nodo_evaluador);
+                    nodos_no_descubiertos.remove(nodo_evaluador);
+                    System.out.println("El nodo evaluador: " + nodo_evaluador + "es conectado por alguno?: " + existencia); 
+                }
+            }
+        }
                        
         HashMap arbol_bfs = new HashMap();              
         
         int explorador = 1;     
-        int contador = 1;
+        contador = 1;
         //for(int i = 1; i <= hashMap_n.size(); i++){
         while(!(nodos_no_descubiertos.isEmpty())){      
             //System.out.println("jjjjjjjj********");                        
@@ -608,9 +644,13 @@ public class ADA01_NB {
             for(int i = 1; i <= hashMap_n.size(); i++){                                
                 
             //System.out.println("Nodos descubiertos: " + nodos_descubiertos.size() +" "+ nodos_descubiertos.values());
+            System.out.println("Nodos descubiertos: " + nodos_descubiertos.size() +" "+ nodos_descubiertos.values());
+            System.out.println("Nodos NO descubiertos: " + nodos_no_descubiertos.size() +" "+ nodos_no_descubiertos.values());
                 
-                if(nodos_descubiertos.containsKey(i)){                    
-                    int nodo_evaluador = Integer.parseInt(nodos_descubiertos.get(i).toString());
+            System.out.println("nodos_descubiertos.containsKey: " + i + " "+ nodos_descubiertos.containsKey(i));
+                if(nodos_descubiertos.containsKey(i)){                                                                             
+                    int nodo_evaluador = Integer.parseInt(nodos_descubiertos.get(i).toString());                      
+                      
                     //System.out.println("nodo a evaluar: " + nodo_evaluador);   
                                                             
                     for(int j = 1; j <= hashMap_m.size(); j++){
