@@ -36,10 +36,10 @@ public class ADA01_NB {
         //in in dirigido auto-ciclos
         
         //Modelo G(n,m) de Erdös y Rényi
-        erdos_renyi(n, m, false, false);
+        //erdos_renyi(n, m, false, false);
         
         //Modelo G(n,p) de Gilbert
-        //gilbert(n, 0.2, true, false);
+        gilbert(n, 0.2, false, false);
         
         //Modelo G(n,r) geográfico simple:
         //geo_simple(n, 0.3, true, false);
@@ -241,6 +241,9 @@ public class ADA01_NB {
         
         //Repositorio de aristas
         HashMap hashMap_m = new HashMap();
+        
+        //Repositorio de pesos
+        HashMap hashMap_w = new HashMap();
                      
         //Generar n nodos empezando por el 1
         for(int v = 1; v <= n; v++){
@@ -303,9 +306,19 @@ public class ADA01_NB {
         //Se leen el tamaño de los repositorios de nodos y aristas
         System.out.println("Nodos: " + hashMap_n.size());
         System.out.println("Aristas: " + hashMap_m.size());
+        
+        //Se recorre el repositorio de aristas y se agrega el peso
+        for(int i = 1; i <= hashMap_m.size(); i++){
+            //System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            //crearle un peso
+            //int peso = volado(1, 10);
+            //System.out.println("ID arista: " + hashMap_m.get(i) + " peso: " + peso);
+            //boolean respuesta = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
+            crear_peso(hashMap_m.get(i).toString(), hashMap_w);
+        }
                         
         System.out.println("*Generando archivo gexf");
-        String file = "./resultados/grafos gexf/gilbert" + "_" + n + "_" + p + ".gexf";
+        
         //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
         
         //String file_bfs = "./resultados/grafos gexf/gilbert_bfs" + "_" + n + "_" + p + ".gexf";
@@ -316,9 +329,20 @@ public class ADA01_NB {
         
         //dfs_i(file_dfs, hashMap_n, hashMap_m, dirigido);
         
-        String file_dfs = "./resultados/grafos gexf/gilbert_dfs_r" + "_" + n + "_" + p + ".gexf";
+        //String file_dfs = "./resultados/grafos gexf/gilbert_dfs_r" + "_" + n + "_" + p + ".gexf";
         
-        dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+        //dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+        
+        //System.out.println("*Generando archivo gexf");
+        //String file = "./resultados/grafos gexf/erdos_renyi" + "_" + n + "_" + m + ".gexf";
+        
+        String file = "./resultados/grafos gexf/gilbert" + "_" + n + "_" + p + ".gexf";
+        
+        generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
+        
+        String file_kruskal = "./resultados/grafos gexf/kruskal/gilbert" + "_" + n + "_" + p + ".gexf";
+        //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
+        kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
     }
  
     /*
@@ -406,7 +430,7 @@ public class ADA01_NB {
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/erdos_renyi" + "_" + n + "_" + m + ".gexf";
         
-        //generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
+        generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
         
         String file_kruskal = "./resultados/grafos gexf/kruskal/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
         //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
