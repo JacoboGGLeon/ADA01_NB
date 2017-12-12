@@ -29,7 +29,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 100;
+        int n = 50;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
@@ -39,10 +39,10 @@ public class ADA01_NB {
         //erdos_renyi(n, m, false, false);
         
         //Modelo G(n,p) de Gilbert
-        gilbert(n, 0.2, false, false);
+        //gilbert(n, 0.2, false, false);
         
         //Modelo G(n,r) geográfico simple:
-        //geo_simple(n, 0.3, true, false);
+        geo_simple(n, 0.4, false, false);
         
         //Variante del modelo G(n,d) Barabási-Albert
         //barabasi_albert(n, d, true, false);
@@ -145,6 +145,8 @@ public class ADA01_NB {
         
         //Repositorio de aristas
         HashMap hashMap_m = new HashMap();
+        
+        HashMap hashMap_w = new HashMap();
                      
         //Generar n nodos empezando por el 1
         for(int v = 1; v <= n; v++){
@@ -212,11 +214,21 @@ public class ADA01_NB {
             System.out.println("Arista " + k + ": " + hashMap_m.get(k));
         }
         
-        System.out.println("*Generando archivo gexf");
-        String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
+        //Se recorre el repositorio de aristas y se agrega el peso
+        for(int i = 1; i <= hashMap_m.size(); i++){
+            //System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            //crearle un peso
+            //int peso = volado(1, 10);
+            //System.out.println("ID arista: " + hashMap_m.get(i) + " peso: " + peso);
+            //boolean respuesta = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
+            crear_peso(hashMap_m.get(i).toString(), hashMap_w);
+        }
+        
+        //System.out.println("*Generando archivo gexf");
+        //String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
         //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
                 
-        String file_bfs = "./resultados/grafos gexf/geo_simple_bfs" + "_" + n + "_" + r + ".gexf";
+        //String file_bfs = "./resultados/grafos gexf/geo_simple_bfs" + "_" + n + "_" + r + ".gexf";
         
         //bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
         
@@ -224,9 +236,19 @@ public class ADA01_NB {
         
         //dfs_i(file_dfs, hashMap_n, hashMap_m, dirigido);
         
-        String file_dfs = "./resultados/grafos gexf/geo_simple_dfs_r" + "_" + n + "_" + r + ".gexf";
+        //String file_dfs = "./resultados/grafos gexf/geo_simple_dfs_r" + "_" + n + "_" + r + ".gexf";
         
-        dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+        //dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+        
+        System.out.println("*Generando archivo gexf");
+        
+        String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
+        
+        generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
+        
+        String file_kruskal = "./resultados/grafos gexf/kruskal/geo_simple" + "_" + n + "_" + r + ".gexf";
+        //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
+        //kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
     } 
     
     /*
@@ -317,7 +339,7 @@ public class ADA01_NB {
             crear_peso(hashMap_m.get(i).toString(), hashMap_w);
         }
                         
-        System.out.println("*Generando archivo gexf");
+        
         
         //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
         
@@ -335,6 +357,8 @@ public class ADA01_NB {
         
         //System.out.println("*Generando archivo gexf");
         //String file = "./resultados/grafos gexf/erdos_renyi" + "_" + n + "_" + m + ".gexf";
+        
+        System.out.println("*Generando archivo gexf");
         
         String file = "./resultados/grafos gexf/gilbert" + "_" + n + "_" + p + ".gexf";
         
