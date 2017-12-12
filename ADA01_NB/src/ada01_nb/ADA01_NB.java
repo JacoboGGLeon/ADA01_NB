@@ -3,8 +3,15 @@ package ada01_nb;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.gephi.graph.api.DirectedGraph;
 import org.gephi.graph.api.Edge;
@@ -29,13 +36,13 @@ public class ADA01_NB {
         //in in dirigido auto-ciclos
         
         //Modelo G(n,m) de Erdös y Rényi
-        //erdos_renyi(n, m, true, false);
+        erdos_renyi(n, m, false, false);
         
         //Modelo G(n,p) de Gilbert
         //gilbert(n, 0.2, true, false);
         
         //Modelo G(n,r) geográfico simple:
-        geo_simple(n, 0.3, true, false);
+        //geo_simple(n, 0.3, true, false);
         
         //Variante del modelo G(n,d) Barabási-Albert
         //barabasi_albert(n, d, true, false);
@@ -121,9 +128,9 @@ public class ADA01_NB {
         String file = "./resultados/grafos gexf/barabasi_albert" + "_" + n + "_" + d + ".gexf";
         //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
                 
-        String file_bfs = "./resultados/grafos gexf/barabasi_albert_bfs" + "_" + n + "_" + d + ".gexf";
+        //String file_bfs = "./resultados/grafos gexf/generation/barabasi_albert_bfs" + "_" + n + "_" + d + ".gexf";
         
-        bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
+        //bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
     }
     
     /*
@@ -207,7 +214,7 @@ public class ADA01_NB {
         
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/geo_simple" + "_" + n + "_" + r + ".gexf";
-        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+        //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
                 
         String file_bfs = "./resultados/grafos gexf/geo_simple_bfs" + "_" + n + "_" + r + ".gexf";
         
@@ -299,7 +306,7 @@ public class ADA01_NB {
                         
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/gilbert" + "_" + n + "_" + p + ".gexf";
-        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+        //generar_gexf(hashMap_n, hashMap_m, dirigido, file);
         
         //String file_bfs = "./resultados/grafos gexf/gilbert_bfs" + "_" + n + "_" + p + ".gexf";
         
@@ -326,6 +333,9 @@ public class ADA01_NB {
         
         //Repositorio de aristas
         HashMap hashMap_m = new HashMap();
+        
+        //Repositorio de pesos
+        HashMap hashMap_w = new HashMap();
                      
         //Generar n nodos empezando por el 1
         for(int v = 1; v <= n; v++){
@@ -366,30 +376,345 @@ public class ADA01_NB {
             //Si se creó el arista, continua 
             if(respuesta){
                 aristas++;
-                aristas_totales++;
+                aristas_totales++;                                
             }
         }
 
-        //Se recorre el repositorio de aristas
+        //Se recorre el repositorio de aristas y se agrega el peso
         for(int i = 1; i <= hashMap_m.size(); i++){
-            System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            //System.out.println("Arista " + i + ": " + hashMap_m.get(i));
+            //crearle un peso
+            //int peso = volado(1, 10);
+            //System.out.println("ID arista: " + hashMap_m.get(i) + " peso: " + peso);
+            //boolean respuesta = crear_arista(nodo_origen, nodo_destino, aristas, hashMap_m, dirigido, auto);
+            crear_peso(hashMap_m.get(i).toString(), hashMap_w);
         }
         
         //Se leen el tamaño de los repositorios de nodos y aristas
         System.out.println("Nodos: " + hashMap_n.size());
         System.out.println("Aristas: " + hashMap_m.size());
         
+        System.out.println(" hashMap_n.keySet() " + hashMap_n.keySet()); 
+        System.out.println(" hashMap_n.values() " + hashMap_n.values()); 
+        
+        System.out.println(" hashMap_m.keySet() " + hashMap_m.keySet()); 
+        System.out.println(" hashMap_m.values() " + hashMap_m.values()); 
+        
+        System.out.println(" hashMap_w.keySet() " + hashMap_w.keySet()); 
+        System.out.println(" hashMap_w.values() " + hashMap_w.values()); 
+        
         System.out.println("*Generando archivo gexf");
         String file = "./resultados/grafos gexf/erdos_renyi" + "_" + n + "_" + m + ".gexf";
-        generar_gexf(hashMap_n, hashMap_m, dirigido, file);
+        
+        //generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
+        
+        String file_kruskal = "./resultados/grafos gexf/kruskal/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
+        //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
+        kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        //generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
         
         //String file_bfs = "./resultados/grafos gexf/erdos_renyi_dfs_i" + "_" + n + "_" + m + ".gexf";
         
         //bfs(file_bfs, hashMap_n, hashMap_m, dirigido);
         
-        String file_dfs = "./resultados/grafos gexf/erdos_renyi_dfs_r" + "_" + n + "_" + m + ".gexf";
+        //String file_dfs = "./resultados/grafos gexf/erdos_renyi_dfs_r" + "_" + n + "_" + m + ".gexf";
         
-        dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+        //dfs_r(file_dfs, hashMap_n, hashMap_m, dirigido);
+    }
+        
+    public static void kruskal(String file, HashMap hashMap_n, HashMap hashMap_m, HashMap hashMap_w, boolean dirigido){
+        
+        //LEE TODOS LOS NODOS
+        String conector = null;
+        if(dirigido == true){
+            conector = "->";
+        }else if(dirigido == false){
+            conector = "--";
+        }
+        
+        int contador = 1;
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Si existe
+            if(hashMap_n.containsKey(i)){
+                int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                System.out.println("nodo a evaluar: " + nodo);        
+
+                for(int j = 1; j <= hashMap_m.size(); j++){
+                    String candidato = hashMap_m.get(j).toString();
+                    String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);
+                    Integer peso = Integer.parseInt(hashMap_w.get(candidato).toString());
+
+                    if(nodo == key_origen){
+                        System.out.println(contador + " Nodo adyacente a " + nodo + ": " + key_destino + " peso: " + peso);                    
+                        contador++;
+                    }
+                }            
+            }
+        }
+                                
+        int temp = hashMap_n.size();
+        
+        HashMap matrix = new HashMap();
+        
+        int[][] ady = new int[temp][temp];
+        
+        System.out.println(temp);
+        System.out.println(ady.length);
+        
+        /*
+        for(int i = 0; i < temp; i++){
+            for(int j = 0; j < temp; j++){
+                ady[i][j] = 9999;
+                //System.out.print(ady[i][j]);
+                if(i==j){
+                    ady[i][j] = 0;
+                }
+            }
+            //System.out.println();
+        }       
+        */        
+        
+        //int contador = 1;
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Si existe
+            if(hashMap_n.containsKey(i)){
+                int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                //System.out.println("nodo a evaluar: " + nodo);        
+
+                for(int j = 1; j <= hashMap_m.size(); j++){
+                    String candidato = hashMap_m.get(j).toString();
+                    String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);
+                    Integer peso = Integer.parseInt(hashMap_w.get(candidato).toString());
+
+                    if(nodo == key_origen){
+                        //System.out.println(contador + " Nodo adyacente a " + nodo + conector + key_destino + " peso: " + peso);                    
+                        //contador++;
+                        int o = key_origen-1;
+                        int p = key_destino-1;
+                        ady[o][p] = (int) peso;
+                        //System.out.println(" se agregó " + o + conector + p + " ady: " + ady[o][p]);  
+                        
+                        String h = o+conector+p;
+                        matrix.put(h, peso);
+                    }
+                }            
+            }
+        }
+        
+        System.out.println(" matrix.size() " + matrix.size()); 
+        System.out.println(" matrix.values()) " + matrix.values()); 
+        System.out.println(" matrix.keySet() " + matrix.keySet()); 
+        
+        matrix = sortByValues(matrix);
+        
+        System.out.println(" matrix.size() " + matrix.size()); 
+        System.out.println(" matrix.values()) " + matrix.values()); 
+        System.out.println(" matrix.keySet() " + matrix.keySet()); 
+        
+        HashMap descubiertos = new HashMap(); //nodos
+        HashMap no_descubiertos = new HashMap(); //nodos
+        
+        for(int i = 1; i <= hashMap_n.size(); i++){        
+            no_descubiertos.put(i, i);            
+        }
+        
+        HashMap arbol_kruskal = new HashMap(); //nodos
+        HashMap arbol_kruskal_peso = new HashMap(); //nodos
+        HashMap arbol_kruskal_peso_reves = new HashMap(); //nodos
+        
+        System.out.println(" descubiertos.values()) " + descubiertos.values()); 
+        System.out.println(" no_descubiertos.values() " + no_descubiertos.values()); 
+        
+        //while(!no_descubiertos.isEmpty()){
+        for ( Object key : matrix.keySet() ) {
+            String candidato = key.toString();
+            String[] parts = candidato.split(conector);
+            Integer key_origen = Integer.parseInt(parts[0]);
+            key_origen = key_origen + 1;
+
+            Integer key_destino = Integer.parseInt(parts[1]);
+            key_destino = key_destino + 1;
+
+            Integer peso = Integer.parseInt(matrix.get(key).toString());            
+
+            //System.out.println(peso + "\t" + (key_origen) + "\t" + (key_destino) + "\t");
+
+            String candidato2 = key_origen + conector + key_destino;
+            arbol_kruskal.put(peso, candidato2);
+
+
+            if(!descubiertos.containsKey(key_origen)){ 
+                descubiertos.put(key_origen, key_origen);
+                arbol_kruskal.put(peso, candidato2);
+                arbol_kruskal_peso.put(candidato2, peso);
+            }
+            //if(!descubiertos.containsKey(key_destino)){ descubiertos.put(key_destino, key_destino);}
+
+        }
+        //}
+        
+        contador = 1;
+        for ( Object key2 : arbol_kruskal_peso.keySet() ) {
+            String can = key2.toString();
+            //int g = Integer.parseInt(arbol_kruskal_peso.get(key2).toString());            
+            
+            arbol_kruskal_peso_reves.put(contador, can);
+            contador++;
+        }
+        
+        /*System.out.println(" arbol_kruskal.size() " + arbol_kruskal.size()); 
+        System.out.println(" arbol_kruskal.values()) " + arbol_kruskal.values()); 
+        System.out.println(" arbol_kruskal.keySet() " + arbol_kruskal.keySet());
+        System.out.println("------------------------------------------");*/
+        System.out.println(" arbol_kruskal_peso.size() " + arbol_kruskal_peso.size()); 
+        System.out.println(" arbol_kruskal_peso.values()) " + arbol_kruskal_peso.values()); 
+        System.out.println(" arbol_kruskal_peso.keySet() " + arbol_kruskal_peso.keySet());
+        System.out.println("------------------------------------------");
+        System.out.println(" arbol_kruskal_peso_reves.size() " + arbol_kruskal_peso_reves.size()); 
+        System.out.println(" arbol_kruskal_peso_reves.values()) " + arbol_kruskal_peso_reves.values()); 
+        System.out.println(" arbol_kruskal_peso_reves.keySet() " + arbol_kruskal_peso_reves.keySet());
+        /*System.out.println("------------------------------------------");
+        System.out.println(" descubiertos.size() " + descubiertos.size()); 
+        System.out.println(" descubiertos.values()) " + descubiertos.values()); 
+        System.out.println(" descubiertos.keySet() " + descubiertos.keySet());
+        System.out.println("------------------------------------------");*/
+        System.out.println("*Generando archivo gexf");        
+        
+        
+        generar_gexf(descubiertos, arbol_kruskal_peso_reves, arbol_kruskal_peso, dirigido, file);
+        
+        
+        for(int i = 1; i <= 10; i++){
+            //Si existe
+            
+            if(matrix.containsValue(i)){
+                //System.out.println( (matrix.entrySet(matrix.containsValue(i))) );
+                
+               
+                
+                //System.out.println(matrix.get(i));
+                 
+                //int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                //System.out.println("nodo a evaluar: " + nodo);     
+                
+                //System.out.println("PESO: " + i);
+                
+                
+                //for(int j = 1; j <= matrix.size(); j++){
+                //}
+                
+                //for(int j = 1; j <= matrix.size(); j++){
+                    
+                    //String candidato = matrix.containsKey(ady);
+                    /*String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);*/
+                    //Integer peso = Integer.parseInt(matrix.get(candidato).toString());
+
+                    //System.out.println("akjshaksaks " + key_origen + conector + key_destino + " peso: " + peso);
+                    
+                    /*
+                    if(i == peso){
+                        //System.out.println(contador + " akjshaksaks " + nodo + conector + key_destino + " peso: " + peso);
+                        //System.out.println(contador + " Nodo adyacente a " + nodo + conector + key_destino + " peso: " + peso);                    
+                        //contador++;
+                        int o = key_origen-1;
+                        int p = key_destino-1;
+                        ady[o][p] = (int) peso;
+                        System.out.println(" se agregó " + o + conector + p + " ady: " + ady[o][p]);  
+                        
+                        String h = o+conector+p;
+                        matrix.put(h, peso);
+                    }*/
+                //}   
+                
+                
+                
+            }
+        }
+        
+        
+        /*
+        System.out.println("ORDENAMIENTO");       
+        HashMap matrix_ordenado = new HashMap();          
+        contador = 1;
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Si existe
+            if(hashMap_n.containsKey(i)){
+                int nodo = i;//Integer.parseInt(nodos_descubiertos.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                System.out.println("nodo a evaluar: " + nodo);        
+
+                for(int j = 0; j < matrix.size(); j++){
+                    if(arbol_bfs.containsKey(j)){
+                        String candidato = arbol_bfs.get(j).toString();
+                        String[] parts = candidato.split(conector);
+                        Integer key_origen = Integer.parseInt(parts[0]);
+                        Integer key_destino = Integer.parseInt(parts[1]);
+
+                        if(nodo == key_origen){
+                            //System.out.println(contador + " Nodo adyacente a " + nodo + ": " + key_destino);     
+                            System.out.println(key_origen + conector+ key_destino);//contador++;
+                            matrix_ordenado.put(contador, key_origen + conector+ key_destino);
+                            contador++;
+                        }
+                    }                    
+                }            
+            }
+        } */             
+        
+        //System.out.println(" arbol_bfs_ordenado.size() " + arbol_bfs_ordenado.size() + " " + arbol_bfs_ordenado.values()); 
+        
+        /*
+        System.out.println("3");
+        for(int i = 0; i < temp; i++){
+            System.out.print(i+1 + " " );
+        }
+        System.out.println();
+        for(int i = 0; i < temp; i++){
+            System.out.print(i+1 + " ");
+            for(int j = 0; j < temp; j++){
+                System.out.print(ady[i][j] + " ");
+            }
+            System.out.println();
+        }
+        */
+                       /*
+        for(int i = 0; i < temp; i++){            
+            for(int j = 0; j < temp; j++){
+                int l = ady[i][j];
+                if(ady[i][j] == 0 && ady[i][j] == 9999){
+                    ady[j][i] = l;
+                }
+                
+            }            
+        }                
+        
+        System.out.println();
+        for(int i = 0; i < temp; i++){
+            System.out.print(i+1 + "\t");
+            for(int j = 0; j < temp; j++){
+                System.out.print(ady[i][j] + "\t");
+            }
+            System.out.println();
+        }
+        
+        //Escoger un nodo al azar dentro de los nodos existentes
+        int nodo_origen = volado(1, hashMap_n.size());            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_origen);
+        
+        int nodo_destino = volado(1, hashMap_n.size());            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_destino);
+        
+        */
+        
     }
     
     public static boolean crear_nodo(int key, String value, HashMap hashMap_n){
@@ -418,6 +743,20 @@ public class ADA01_NB {
         return respuesta;
     }
 
+    public static boolean crear_peso(String key, HashMap hashMap_w){
+        boolean respuesta;
+        
+        //Se agrega el peso al arista      
+        hashMap_w.put(key, volado(1, 10));
+
+        System.out.println("Se agregó el peso: " + hashMap_w.get(key) + " al artista: " + key);
+
+        //Regresa verdadero
+        respuesta = true;
+        
+        return respuesta;
+    }    
+    
     public static boolean crear_arista(int key_nodo_u, int key_nodo_v, int key, HashMap hashMap_m, boolean dirigido, boolean auto){
         boolean respuesta = false, validacion = false;
         String arista = null;
@@ -478,7 +817,8 @@ public class ADA01_NB {
         return (int) Math.floor(Math.random()*(max-min+1)+(min));
     }
     
-    public static void generar_gexf(HashMap hashMap_n, HashMap hashMap_m, boolean dirigido, String archivo){
+    public static void generar_gexf(HashMap hashMap_n, HashMap hashMap_m, HashMap hashMap_w, boolean dirigido, String archivo){
+    //public static void generar_gexf(HashMap hashMap_n, HashMap hashMap_m, boolean dirigido, String archivo){  
         String conector = null;
         
         if(dirigido == true){
@@ -516,18 +856,25 @@ public class ADA01_NB {
         //Se recorre el repositorio de aristas
         for(int i = 1; i <= hashMap_m.size(); i++){
             //System.out.println("GEXF m => Arista " + i + ": " + hashMap_m.get(i));
-            String arista = hashMap_m.get(i).toString();
+            String arista = hashMap_m.get(i).toString();            
+            Integer peso = Integer.parseInt(hashMap_w.get(arista).toString());
+            
             String[] parts = arista.split(conector);
 
+            
             Integer key_origen = Integer.parseInt(parts[0]);
             Node nodo_origen = directedGraph.getNode(key_origen.toString());//gm_erdos_renyi.getGraph().getNode(key_origen);
 
             Integer key_destino = Integer.parseInt(parts[1]);
             Node nodo_destino = directedGraph.getNode(key_destino.toString());//gm_erdos_renyi.getGraph().getNode(key_destino);
 
-            System.out.println("GEXF m => " + " (key) " + nodo_origen.getId().toString() + " (key) " + nodo_destino.getId().toString());
-
-            Edge e = gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_destino, dirigido);
+            System.out.println("GEXF m => " + " (key) " + nodo_origen.getId().toString() + " (key) " + nodo_destino.getId().toString() + " (weight) " + peso);
+            //System.out.println("GEXF m => " + " (key) " + nodo_origen.getId().toString() + " (key) " + nodo_destino.getId().toString());
+            
+            //Edge e = gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_destino, dirigido); 
+            Edge e = gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_destino, 0, peso, dirigido); 
+            //gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_destino, peso, dirigido);
+            //gm_erdos_renyi.factory().newEdge(nodo_origen, nodo_origen, 2, peso, dirigido); 
             e.setColor(Color.decode("#adb3ff"));
 
             //Apend
@@ -552,6 +899,113 @@ public class ADA01_NB {
 
         
     }
+        
+    private static HashMap sortByValues(HashMap map) { 
+       List list = new LinkedList(map.entrySet());
+       // Defined Custom Comparator here
+       Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+               return ((Comparable) ((Map.Entry) (o1)).getValue())
+                  .compareTo(((Map.Entry) (o2)).getValue());
+            }
+       });
+
+       // Here I am copying the sorted list in HashMap
+       // using LinkedHashMap to preserve the insertion order
+       HashMap sortedHashMap = new LinkedHashMap();
+       for (Iterator it = list.iterator(); it.hasNext();) {
+              Map.Entry entry = (Map.Entry) it.next();
+              sortedHashMap.put(entry.getKey(), entry.getValue());
+       } 
+       return sortedHashMap;
+    }
+    
+    /*
+    public static void dijkstra(String file, HashMap hashMap_n, HashMap hashMap_m, HashMap hashMap_w, boolean dirigido){
+        HashMap hashMap_pq = new HashMap();
+        HashMap hashMap_pq_w = new HashMap();
+        
+        HashMap nodos_descubiertos = new HashMap();
+        HashMap nodos_no_descubiertos = new HashMap();
+        HashMap nodos_descubiertos_w = new HashMap();
+        
+        HashMap aristas_dijkstra = new HashMap(); 
+        
+        //LEE TODOS LOS NODOS
+        String conector = null;
+        if(dirigido == true){
+            conector = "->";
+        }else if(dirigido == false){
+            conector = "--";
+        }
+        
+        int contador = 1;
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Si existe
+            if(hashMap_n.containsKey(i)){
+                int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                System.out.println("nodo a evaluar: " + nodo);        
+
+                for(int j = 1; j <= hashMap_m.size(); j++){
+                    String candidato = hashMap_m.get(j).toString();
+                    String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);
+                    double peso = Double.parseDouble(hashMap_w.get(candidato).toString());
+
+                    if(nodo == key_origen){
+                        System.out.println(contador + " Nodo adyacente a " + nodo + ": " + key_destino + " peso: " + peso);                    
+                        contador++;
+                    }
+                }            
+            }
+        }
+        
+        //Escoger un nodo al azar dentro de los nodos existentes
+        int nodo_origen = volado(1, hashMap_n.size());
+            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_origen);
+            
+        //Checar si existe el nodo origen
+        if(hashMap_n.containsKey(nodo_origen)){
+            System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
+        }
+        
+        int key = nodo_origen;
+        String value = String.valueOf(nodo_origen);
+                        
+        //Intenta agregarlo
+        if(nodos_descubiertos.containsValue(value)){
+            System.out.println("NO se descubrió el nodo => (key) " + key + " (value) " + value);
+            
+        // Si NO existe el nodo, entonces SÍ lo agrega al repositorio
+        //}else if(!hashMap_n.containsKey(key)){
+        }else if(!nodos_descubiertos.containsValue(value)){
+            //Crea el nodo con key y value
+            System.out.println("Se descubrió el nodo => (key) " + key + " (value) " + value);
+            nodos_descubiertos.put(key, key); 
+            hashMap_pq.put(key, key); 
+            hashMap_pq_w.put(key, 0.0); 
+            
+            for(int i = 1; i <= hashMap_n.size(); i++){
+                //System.out.println("hashMap_n.get(i): " + hashMap_n.get(i));
+                
+                int nodo_existente = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                
+                //System.out.println("nodo_existente: " + nodo_existente);
+                if(nodo_existente != key){
+                    nodos_no_descubiertos.put(nodo_existente, nodo_existente);
+                }
+            }
+        }
+        
+        System.out.println("hashMap_pq: " + hashMap_pq.values());
+        System.out.println("hashMap_pq_w: " + hashMap_pq_w.values());
+        
+                          
+    }
+    */
     
     public static void bfs(String file, HashMap hashMap_n, HashMap hashMap_m, boolean dirigido){          
         String conector = null;
@@ -734,7 +1188,7 @@ public class ADA01_NB {
         System.out.println("Nodos NO descubiertos: " + nodos_no_descubiertos.size() +" "+ nodos_no_descubiertos.values());
         
         System.out.println("*Generando archivo gexf");        
-        generar_gexf(nodos_descubiertos, arbol_bfs_ordenado, dirigido, file);
+        //generar_gexf(nodos_descubiertos, arbol_bfs_ordenado, dirigido, file);
         
     }
    
@@ -910,7 +1364,7 @@ public class ADA01_NB {
         System.out.println("Nodos NO descubiertos: " + nodos_no_descubiertos.size() +" "+ nodos_no_descubiertos.values());
         
         System.out.println("*Generando archivo gexf");        
-        generar_gexf(nodos_descubiertos, arbol_dfs_ordenado, dirigido, file);
+        //generar_gexf(nodos_descubiertos, arbol_dfs_ordenado, dirigido, file);
     }
     
     public static void dfs_r(String file, HashMap hashMap_n, HashMap hashMap_m, boolean dirigido){
@@ -1090,7 +1544,7 @@ public class ADA01_NB {
         System.out.println("Nodos NO descubiertos: " + nodos_no_descubiertos.size() +" "+ nodos_no_descubiertos.values());
         
         System.out.println("*Generando archivo gexf");        
-        generar_gexf(nodos_descubiertos, arbol_dfs_ordenado, dirigido, file);
+        //generar_gexf(nodos_descubiertos, arbol_dfs_ordenado, dirigido, file);
     }
     
     public static void recursivo(int contador, String conector, HashMap hashMap_n, HashMap hashMap_m, HashMap nodos_descubiertos, HashMap nodos_no_descubiertos, HashMap arbol_dfs){                                
@@ -1136,4 +1590,131 @@ public class ADA01_NB {
         }
               
     }
+
+    /*
+    public static void dijkstra(String file, HashMap hashMap_n, HashMap hashMap_m, HashMap hashMap_w, boolean dirigido){
+        HashMap hashMap_pq = new HashMap();
+        HashMap hashMap_pq_w = new HashMap();
+        HashMap nodos_descubiertos = new HashMap();
+        HashMap nodos_no_descubiertos = new HashMap();
+        HashMap nodos_descubiertos_w = new HashMap();
+        HashMap aristas_dijkstra = new HashMap(); 
+        
+        //LEE TODOS LOS NODOS
+        String conector = null;
+        if(dirigido == true){
+            conector = "->";
+        }else if(dirigido == false){
+            conector = "--";
+        }
+        
+        int contador = 1;
+        for(int i = 1; i <= hashMap_n.size(); i++){
+            //Si existe
+            if(hashMap_n.containsKey(i)){
+                int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                System.out.println("nodo a evaluar: " + nodo);        
+
+                for(int j = 1; j <= hashMap_m.size(); j++){
+                    String candidato = hashMap_m.get(j).toString();
+                    String[] parts = candidato.split(conector);
+                    Integer key_origen = Integer.parseInt(parts[0]);
+                    Integer key_destino = Integer.parseInt(parts[1]);
+                    double peso = Double.parseDouble(hashMap_w.get(candidato).toString());
+
+                    if(nodo == key_origen){
+                        System.out.println(contador + " Nodo adyacente a " + nodo + ": " + key_destino + " peso: " + peso);                    
+                        contador++;
+                    }
+                }            
+            }
+        }
+        
+        //Escoger un nodo al azar dentro de los nodos existentes
+        int nodo_origen = volado(1, hashMap_n.size());
+            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_origen);
+            
+        //Checar si existe el nodo origen
+        if(hashMap_n.containsKey(nodo_origen)){
+            System.out.println("SÍ existe el nodo (key) " + nodo_origen); 
+        }
+        
+        int key = nodo_origen;
+        String value = String.valueOf(nodo_origen);
+                        
+        //Intenta agregarlo
+        if(nodos_descubiertos.containsValue(value)){
+            System.out.println("NO se descubrió el nodo => (key) " + key + " (value) " + value);
+            
+        // Si NO existe el nodo, entonces SÍ lo agrega al repositorio
+        //}else if(!hashMap_n.containsKey(key)){
+        }else if(!nodos_descubiertos.containsValue(value)){
+            //Crea el nodo con key y value
+            System.out.println("Se descubrió el nodo => (key) " + key + " (value) " + value);
+            nodos_descubiertos.put(key, key); 
+            hashMap_pq.put(key, key); 
+            hashMap_pq_w.put(key, 0.0); 
+            
+            for(int i = 1; i <= hashMap_n.size(); i++){
+                //System.out.println("hashMap_n.get(i): " + hashMap_n.get(i));
+                
+                int nodo_existente = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                
+                //System.out.println("nodo_existente: " + nodo_existente);
+                if(nodo_existente != key){
+                    nodos_no_descubiertos.put(nodo_existente, nodo_existente);
+                }
+            }
+        }
+        
+        System.out.println("hashMap_pq: " + hashMap_pq.values());
+        System.out.println("hashMap_pq_w: " + hashMap_pq_w.values());
+        
+        //Inicio
+        
+        while(!hashMap_pq.isEmpty()){        
+            //System.out.println("hashMap_pq.size(): " + hashMap_pq.size()); 
+            for(int k = 1; k <= hashMap_n.size(); k++){
+               
+                if(hashMap_pq.containsKey(k)){
+                    int nodo_pq = Integer.parseInt(hashMap_pq.get(k).toString());                
+                    System.out.println("nodo a evaluar en PQ: " + nodo_pq); 
+                    
+                    for(int j = 1; j <= hashMap_m.size(); j++){
+                        String candidato = hashMap_m.get(j).toString();
+                        String[] parts = candidato.split(conector);
+                        Integer key_origen = Integer.parseInt(parts[0]);
+                        Integer key_destino = Integer.parseInt(parts[1]);
+                        double peso = Double.parseDouble(hashMap_w.get(candidato).toString());
+
+                        //se meten a PQ los nodos adyacentes
+                        if(nodo_pq == key_origen){
+                            System.out.println(" Nodo adyacente a " + nodo_pq + ": " + key_destino + " peso: " + peso);
+                            hashMap_pq.put(key_destino, key_destino);
+                            hashMap_pq_w.put(key, peso);
+                        }                                                
+                    }
+                                        
+                    //System.out.println("hashMap_pq: " + hashMap_pq.size() + " " + hashMap_pq.values());
+                    //System.out.println("hashMap_pq_w: " + hashMap_pq_w.size() + " " + hashMap_pq_w);
+                    
+                    //Ordenar                                      
+                    HashMap map = sortByValues(hashMap_pq_w);                     
+                    hashMap_pq_w = map;
+                                        
+                    System.out.println("hashMap_pq_w: " + hashMap_pq_w.size() + " " + hashMap_pq_w);
+                    System.out.println("hashMap_pq_w ordenado: " + hashMap_pq_w.size() + " " + hashMap_pq_w);  
+                    
+                    
+                    //System.out.println("hashMap_pq: " + hashMap_pq.size() + " " + hashMap_pq.values());
+                    //System.out.println("hashMap_pq_w: " + hashMap_pq_w.size() + " " + hashMap_pq_w.values());
+                                                                                
+                } 
+                
+                   
+            }                    
+        }                  
+    }*/
 }
