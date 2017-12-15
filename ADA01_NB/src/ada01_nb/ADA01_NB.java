@@ -29,7 +29,7 @@ public class ADA01_NB {
     public static void main(String[] args) {
         System.out.println("Graphs");
         
-        int n = 100;
+        int n = 50;
         int m = (int) ((n*n)*0.2);
         int d = (int) (n*0.2);
         
@@ -39,7 +39,7 @@ public class ADA01_NB {
         //erdos_renyi(n, m, false, false);
         
         //Modelo G(n,p) de Gilbert
-        //gilbert(n, 0.9, false, false);
+        //gilbert(n, 0.8, false, false);
         
         //Modelo G(n,r) geográfico simple:
         geo_simple(n, 0.8, false, false);
@@ -250,8 +250,11 @@ public class ADA01_NB {
         //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
         //kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
         
-        String file_prim = "./resultados/grafos gexf/prim/geo_simple" + "_" + n + "_" + r + ".gexf";
-        prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        //String file_prim = "./resultados/grafos gexf/prim/geo_simple" + "_" + n + "_" + r + ".gexf";
+        //prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        
+        String file_dijkstra = "./resultados/grafos gexf/dijkstra/geo_simple" + "_" + n + "_" + r + ".gexf";
+        dijkstra(file_dijkstra, hashMap_n, hashMap_m, hashMap_w, dirigido);
     } 
     
     /*
@@ -371,8 +374,11 @@ public class ADA01_NB {
         //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
         //kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
         
-        String file_prim = "./resultados/grafos gexf/prim/gilbert" + "_" + n + "_" + p + ".gexf";
-        prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        //String file_prim = "./resultados/grafos gexf/prim/gilbert" + "_" + n + "_" + p + ".gexf";
+        //prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        
+        String file_dijkstra = "./resultados/grafos gexf/dijkstra/gilbert" + "_" + n + "_" + p + ".gexf";
+        dijkstra(file_dijkstra, hashMap_n, hashMap_m, hashMap_w, dirigido);
     }
  
     /*
@@ -469,8 +475,11 @@ public class ADA01_NB {
         //String file_kruskal = "./resultados/grafos gexf/erdos_renyi_kruskal" + "_" + n + "_" + m + ".gexf";
         //kruskal(file_kruskal, hashMap_n, hashMap_m, hashMap_w, dirigido);
 //        /resultados/grafos gexf/prim
-        String file_prim = "./resultados/grafos gexf/prim/erdos_renyi" + "_" + n + "_" + m + ".gexf";
-        prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        //String file_prim = "./resultados/grafos gexf/prim/erdos_renyi" + "_" + n + "_" + m + ".gexf";
+        //prim(file_prim, hashMap_n, hashMap_m, hashMap_w, dirigido);
+        
+        String file_dijkstra = "./resultados/grafos gexf/dijkstra/erdos_renyi" + "_" + n + "_" + m + ".gexf";
+        dijkstra(file_dijkstra, hashMap_n, hashMap_m, hashMap_w, dirigido);
         
         //generar_gexf(hashMap_n, hashMap_m, hashMap_w, dirigido, file);
         
@@ -698,6 +707,220 @@ public class ADA01_NB {
         System.out.println("*Generando archivo gexf");        
         
         generar_gexf(hashMap_n, arbol_prim_pesos_rev, arbol_prim_pesos, dirigido, file);
+        
+        //generar_gexf(descubiertos, arbol_kruskal_peso_reves, arbol_kruskal_peso, dirigido, file);
+    }
+    
+    public static void dijkstra(String file, HashMap hashMap_n, HashMap hashMap_m, HashMap hashMap_w, boolean dirigido){
+        //LEE TODOS LOS NODOS
+        String conector = null;
+        if(dirigido == true){
+            conector = "->";
+        }else if(dirigido == false){
+            conector = "--";
+        }
+        
+        //Escoger un nodo al azar dentro de los nodos existentes
+        int nodo_origen = volado(1, hashMap_n.size());            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_origen);
+        
+        int nodo_destino = volado(1, hashMap_n.size());            
+        System.out.println("Se eligió al azar el nodo origen: " + nodo_destino);
+                
+        HashMap descubiertos = new HashMap(); //nodos
+        
+        HashMap arbol_dijkstra = new HashMap(); //nodos
+        HashMap arbol_dijkstra_pesos = new HashMap(); //nodos
+        
+        HashMap hashMap_m_copia = hashMap_m;
+                
+        //Mientras que no estén todos los vértices descubiertos
+        int ds = descubiertos.size();
+        int n = hashMap_n.size();
+        
+        System.out.println(" hashMap_n.size() " + hashMap_n.size()); 
+        
+        
+        int c = 1;
+           
+        System.out.println(" hashMap_m_copia.keySet() " + hashMap_m_copia.keySet()); 
+        System.out.println(" hashMap_m_copia.values() " + hashMap_m_copia.values()); 
+        
+        //while( arbol_prim.size() !=  (n-1) ){            
+        while( descubiertos.size() !=  hashMap_n.size()){            
+            //System.out.println(" POR ESOOOOOOOO " + arbol_prim.size() + " <= " + (n-1)); 
+            for(int i = 1; i <= hashMap_n.size(); i++){
+                //Si existe
+                if(hashMap_n.containsKey(i)){
+                    int nodo = i;//Integer.parseInt(hashMap_n.get(i).toString());
+                    //String cond = String.valueOf(nodos_descubiertos.get(contador_capa));
+                    System.out.println("Nodo a evaluar: " + nodo);       
+
+                    HashMap set_ev = new HashMap(); //nodos
+
+                    for(int j = 1; j <= hashMap_m_copia.size(); j++){
+                        if(hashMap_m_copia.containsKey(j)){
+                            String candidato = hashMap_m_copia.get(j).toString();
+                            String[] parts = candidato.split(conector);
+                            Integer key_origen = Integer.parseInt(parts[0]);
+                            Integer key_destino = Integer.parseInt(parts[1]);
+                            Integer peso = Integer.parseInt(hashMap_w.get(candidato).toString());
+
+                            if(nodo == key_origen){
+                                //System.out.println(" Lectura " + key_origen + conector + key_destino + " peso: " + peso);                    
+                                String temp = key_origen+conector+key_destino;
+                                set_ev.put(temp, peso);
+                            }
+                        }
+                    }
+                    
+                    if(!set_ev.isEmpty()){
+                        Comparable m = (Collections.min(set_ev.values()));
+                        int peso_min = Integer.parseInt(m.toString());
+                        String nodo_min = null;
+                        for ( Object key : set_ev.keySet() ) {
+                            int g = Integer.parseInt(set_ev.get(key).toString());            
+                            if(g == peso_min){
+                                nodo_min = key.toString();
+                            }                                        
+                        }   
+                        /*
+                        System.out.println("set_ev.size() " + set_ev.size()); 
+                        System.out.println("set_ev.keySet() " + set_ev.keySet());
+                        System.out.println("set_ev.values()) " + set_ev.values());
+                        */
+                        String candidato = nodo_min;//hashMap_m.get(j).toString();
+                        String[] parts = candidato.split(conector);
+                        Integer key_origen = Integer.parseInt(parts[0]);
+                        Integer key_destino = Integer.parseInt(parts[1]);
+                                                
+                            //if( !descubiertos.containsKey(key_origen) ){
+                            if(descubiertos.isEmpty()){
+                                
+                                //nodo_origen
+                                if(key_origen == nodo_origen){
+                                    descubiertos.put(key_origen, key_origen);
+                                    //descubiertos.put(key_destino, key_destino);
+                                    arbol_dijkstra.put(c, nodo_min);
+                                    arbol_dijkstra_pesos.put(nodo_min, peso_min);                            
+
+
+                                    /*
+                                    arbol_kruskal.put(peso, candidato2);
+                                    arbol_kruskal_peso.put(candidato2, peso);
+                                    */
+
+                                    System.out.println("set_ev.min()) " + nodo_min + ": " + peso_min);                                            
+
+                                    //System.out.println("******se removi´o: " + nodo_min + " : " + hashMap_m_copia.size());                    
+
+                                    //hashMap_m_copia.remove(key);
+                                    int t = 0;
+                                    if(hashMap_m_copia.containsValue(nodo_min)){
+
+                                        for(Object key : hashMap_m_copia.keySet()){
+                                            if(hashMap_m_copia.get(key).equals(nodo_min)){
+                                                //return key; //return the first found
+                                                t = Integer.parseInt(key.toString());
+                                            }
+                                        }                             
+                                    }
+
+                                    if(t > 0){
+                                        hashMap_m_copia.remove(t);
+                                        System.out.println("******hashMap_m_copia contiene: " + nodo_min + " : "+ hashMap_m_copia.size());                    
+                                    }
+
+                                    c++;      
+                                       
+                                }
+                                                  
+                        }
+                     
+                        if( !descubiertos.isEmpty() && !descubiertos.containsKey(key_origen)){
+                            //f = true;
+                            if(!descubiertos.containsKey(key_destino)){
+                                //descubiertos.put(key_destino, key_destino);
+                            }
+                            descubiertos.put(key_origen, key_origen);
+                            //descubiertos.put(key_destino, key_destino);
+                            arbol_dijkstra.put(c, nodo_min);
+                            arbol_dijkstra_pesos.put(nodo_min, peso_min);                            
+                            
+                            
+                            /*
+                            arbol_kruskal.put(peso, candidato2);
+                            arbol_kruskal_peso.put(candidato2, peso);
+                            */
+
+                            System.out.println("set_ev.min()) " + nodo_min + ": " + peso_min);                                            
+
+                            //System.out.println("******se removi´o: " + nodo_min + " : " + hashMap_m_copia.size());                    
+
+                            //hashMap_m_copia.remove(key);
+                            int t = 0;
+                            if(hashMap_m_copia.containsValue(nodo_min)){
+
+                                for(Object key : hashMap_m_copia.keySet()){
+                                    if(hashMap_m_copia.get(key).equals(nodo_min)){
+                                        //return key; //return the first found
+                                        t = Integer.parseInt(key.toString());
+                                    }
+                                }                             
+                            }
+
+                            if(t > 0){
+                                hashMap_m_copia.remove(t);
+                                System.out.println("******hashMap_m_copia contiene: " + nodo_min + " : "+ hashMap_m_copia.size());                    
+                            }
+
+                            c++;
+                            /*System.out.println("set_ev.size() " + set_ev.size()); 
+                        System.out.println("set_ev.keySet() " + set_ev.keySet());
+                        System.out.println("set_ev.values()) " + set_ev.values());*/
+                        }                        
+                    }
+                }
+            }        
+            System.out.println(" descubiertos.size() " + descubiertos.size()); 
+        System.out.println(" descubiertos.keySet() " + descubiertos.keySet());
+        System.out.println(" descubiertos.values()) " + descubiertos.values()); 
+        System.out.println("------------------------------------------");
+        System.out.println(" arbol_prim.size() " + arbol_dijkstra.size()); 
+        System.out.println(" arbol_prim.keySet() " + arbol_dijkstra.keySet());
+        System.out.println(" arbol_prim.values()) " + arbol_dijkstra.values());
+        }
+        
+        System.out.println(" descubiertos.size() " + descubiertos.size()); 
+        System.out.println(" descubiertos.keySet() " + descubiertos.keySet());
+        System.out.println(" descubiertos.values()) " + descubiertos.values()); 
+        System.out.println("------------------------------------------");
+        System.out.println(" arbol_prim.size() " + arbol_dijkstra.size()); 
+        System.out.println(" arbol_prim.keySet() " + arbol_dijkstra.keySet());
+        System.out.println(" arbol_prim.values()) " + arbol_dijkstra.values());
+        System.out.println("------------------------------------------");
+        System.out.println(" arbol_prim_pesos.size() " + arbol_dijkstra_pesos.size()); 
+        System.out.println(" arbol_prim_pesos.keySet() " + arbol_dijkstra_pesos.keySet());
+        System.out.println(" arbol_prim_pesos.values()) " + arbol_dijkstra_pesos.values());
+        
+        HashMap arbol_dijkstra_pesos_rev = new HashMap();
+        
+        int contador = 1;
+        for ( Object key2 : arbol_dijkstra_pesos.keySet() ) {
+            String can = key2.toString();
+            //int g = Integer.parseInt(arbol_kruskal_peso.get(key2).toString());            
+            
+            arbol_dijkstra_pesos_rev.put(contador, can);
+            contador++;
+        }
+        
+        
+        
+        
+        System.out.println("*Generando archivo gexf");        
+        
+        generar_gexf(hashMap_n, arbol_dijkstra_pesos_rev, arbol_dijkstra_pesos, dirigido, file);
+        //generar_gexf(hashMap_n, arbol_prim_pesos_rev, arbol_prim_pesos, dirigido, file);
         
         //generar_gexf(descubiertos, arbol_kruskal_peso_reves, arbol_kruskal_peso, dirigido, file);
     }
